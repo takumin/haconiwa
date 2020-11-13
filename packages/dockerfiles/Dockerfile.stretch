@@ -1,7 +1,7 @@
 # -*- mode: dockerfile -*-
 # vim: set ft=dockerfile :
 
-FROM ubuntu:bionic
+FROM debian:stretch
 MAINTAINER Uchio Kondo <udzura@udzura.jp>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -18,11 +18,11 @@ RUN apt-get -qq -y install libprotoc-dev libprotobuf-c-dev \
     libnl-3-dev libnet1-dev libcap-dev pkg-config asciidoc xmlto \
     libbsd-dev systemtap-sdt-dev
 
-ENV VERSION <%= @latest_dot %>
-ENV VERSION_TILDE <%= @latest %>
+ENV VERSION 0.11.5
+ENV VERSION_TILDE 0.11.5
 ENV USER root
-ENV SRC_PKG_NAME haconiwa_<%= @latest %>-1_amd64.deb
-ENV DST_PKG_NAME haconiwa_<%= @latest %>-1+bionic_amd64.deb
+ENV SRC_PKG_NAME haconiwa_0.11.5-1_amd64.deb
+ENV DST_PKG_NAME haconiwa_0.11.5-1+stretch_amd64.deb
 VOLUME /pkg
 
 COPY . /root/haconiwa-$VERSION_TILDE

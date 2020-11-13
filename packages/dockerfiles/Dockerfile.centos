@@ -1,5 +1,7 @@
 # -*- mode: dockerfile -*-
-FROM centos:7.4.1708
+# vim: set ft=dockerfile :
+
+FROM centos:7
 MAINTAINER Uchio Kondo <udzura@udzura.jp>
 
 RUN yum -q -y update

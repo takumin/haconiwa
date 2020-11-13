@@ -2,12 +2,12 @@
 /mruby.bak/
 /mruby-*
 /pkg/
-tmp/
+/tmp/
 /src/REVISIONS.defs
 
 /debian/
 /vendor/
-/.bundle
+/.bundle/
 
 /*.haco
 

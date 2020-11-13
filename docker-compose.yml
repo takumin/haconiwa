@@ -1,23 +1,35 @@
-deb:
-  dockerfile: packages/dockerfiles/Dockerfile.debian
+stretch:
+  dockerfile: packages/dockerfiles/Dockerfile.stretch
   build: .
   volumes:
-    - .:/out:rw
+    - ./pkg:/pkg:rw
 
-deb9:
-  dockerfile: packages/dockerfiles/Dockerfile.debian9
+buster:
+  dockerfile: packages/dockerfiles/Dockerfile.buster
   build: .
   volumes:
-    - .:/out:rw
+    - ./pkg:/pkg:rw
+
+xenial:
+  dockerfile: packages/dockerfiles/Dockerfile.xenial
+  build: .
+  volumes:
+    - ./pkg:/pkg:rw
 
 bionic:
   dockerfile: packages/dockerfiles/Dockerfile.bionic
   build: .
   volumes:
-    - .:/out:rw
+    - ./pkg:/pkg:rw
+
+focal:
+  dockerfile: packages/dockerfiles/Dockerfile.focal
+  build: .
+  volumes:
+    - ./pkg:/pkg:rw
 
 rpm:
   dockerfile: packages/dockerfiles/Dockerfile.centos
   build: .
   volumes:
-    - .:/out:rw
+    - ./pkg:/pkg:rw

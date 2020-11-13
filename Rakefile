@@ -182,18 +182,26 @@ namespace :release do
   task :shipit => [:tarball, :run_ghr]
 
   desc "Build all of packages in parallel"
-  multitask :packages => [:deb, :deb9, :bionic]
+  multitask :packages => [:stretch, :buster, :xenial, :bionic, :focal]
 
-  task :deb do
-    Dir.chdir(pwd) { sh "docker-compose build deb && docker-compose run deb" }
+  task :stretch do
+    Dir.chdir(pwd) { sh "docker-compose build stretch && docker-compose run stretch" }
   end
 
-  task :deb9 do
-    Dir.chdir(pwd) { sh "docker-compose build deb9 && docker-compose run deb9" }
+  task :buster do
+    Dir.chdir(pwd) { sh "docker-compose build buster && docker-compose run buster" }
+  end
+
+  task :xenial do
+    Dir.chdir(pwd) { sh "docker-compose build xenial && docker-compose run xenial" }
   end
 
   task :bionic do
     Dir.chdir(pwd) { sh "docker-compose build bionic && docker-compose run bionic" }
+  end
+
+  task :focal do
+    Dir.chdir(pwd) { sh "docker-compose build focal && docker-compose run focal" }
   end
 
   task :rpm do
@@ -203,10 +211,11 @@ namespace :release do
   desc "release packages to packagecloud"
   task :packagecloud do
     Dir.chdir pwd do
+      sh "package_cloud push udzura/haconiwa/debian/stretch pkg/haconiwa_#{Haconiwa::VERSION}-1+stretch_amd64.deb"
+      sh "package_cloud push udzura/haconiwa/debian/buster pkg/haconiwa_#{Haconiwa::VERSION}-1+buster_amd64.deb"
+      sh "package_cloud push udzura/haconiwa/ubuntu/xenial pkg/haconiwa_#{Haconiwa::VERSION}-1+xenial_amd64.deb"
       sh "package_cloud push udzura/haconiwa/ubuntu/bionic pkg/haconiwa_#{Haconiwa::VERSION}-1+bionic_amd64.deb"
-      sh "package_cloud push udzura/haconiwa/ubuntu/xenial pkg/haconiwa_#{Haconiwa::VERSION}-1_amd64.deb"
-      sh "package_cloud push udzura/haconiwa/debian/jessie pkg/haconiwa_#{Haconiwa::VERSION}-1_amd64.deb"
-      sh "package_cloud push udzura/haconiwa/debian/stretch pkg/haconiwa_#{Haconiwa::VERSION}-1+debian9_amd64.deb"
+      sh "package_cloud push udzura/haconiwa/ubuntu/focal pkg/haconiwa_#{Haconiwa::VERSION}-1+focal_amd64.deb"
       # sh "package_cloud push udzura/haconiwa/el/7 pkg/haconiwa-#{Haconiwa::VERSION}-1.el7.x86_64.rpm"
       # sh "package_cloud push udzura/haconiwa/fedora/23 pkg/haconiwa-#{Haconiwa::VERSION}-1.el7.x86_64.rpm"
       # sh "package_cloud push udzura/haconiwa/fedora/24 pkg/haconiwa-#{Haconiwa::VERSION}-1.el7.x86_64.rpm"
@@ -231,14 +240,20 @@ task :package_regen do
     rpm = ERB.new(File.read("packages/templates/rpm-spec.erb")).result(binding).strip
     File.write("packages/rpm/haconiwa.spec", rpm + "\n")
 
-    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.debian.erb")).result(binding)
-    File.write("packages/dockerfiles/Dockerfile.debian", docker_deb)
+    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.stretch.erb")).result(binding)
+    File.write("packages/dockerfiles/Dockerfile.stretch", docker_deb)
 
-    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.debian9.erb")).result(binding)
-    File.write("packages/dockerfiles/Dockerfile.debian9", docker_deb)
+    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.buster.erb")).result(binding)
+    File.write("packages/dockerfiles/Dockerfile.buster", docker_deb)
+
+    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.xenial.erb")).result(binding)
+    File.write("packages/dockerfiles/Dockerfile.xenial", docker_deb)
 
     docker_deb = ERB.new(File.read("packages/templates/Dockerfile.bionic.erb")).result(binding)
     File.write("packages/dockerfiles/Dockerfile.bionic", docker_deb)
+
+    docker_deb = ERB.new(File.read("packages/templates/Dockerfile.focal.erb")).result(binding)
+    File.write("packages/dockerfiles/Dockerfile.focal", docker_deb)
 
     docker_rpm = ERB.new(File.read("packages/templates/Dockerfile.centos.erb")).result(binding)
     File.write("packages/dockerfiles/Dockerfile.centos", docker_rpm)

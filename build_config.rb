@@ -1,7 +1,8 @@
 def gem_config(conf)
   # If your haconiwa must check runner and hacofile's owner, please uncomment
   # conf.cc.defines << "HACONIWA_SECURE_RUN"
-  conf.cc.defines << "HACONIWA_USE_CRIU" unless ENV["CI"]
+  conf.cc.defines << "HACONIWA_USE_CRIU" if ENV["HACONIWA_USE_CRIU"]
+  conf.cc.defines << "MRB_CRIU_USE_STATIC" if ENV["HACONIWA_USE_CRIU_STATIC"]
   conf.gem File.expand_path(File.dirname(__FILE__))
 end
 
